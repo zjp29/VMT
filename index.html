@@ -1,0 +1,158 @@
+<html>
+    <head>
+        <style>
+            body { 
+                font-family:Arial, Helvetica, sans-serif;
+            }
+
+            .container {
+                display:grid;
+                grid-template-areas:
+                    'calc5';
+                grid-gap:1em;
+            }
+            div {
+                text-align: center;
+                animation-duration: 1s;
+                animation-name: slidein;
+            }
+            .calc5 {
+                grid-area:calc5;
+            }
+            li {
+                padding:.5em;
+            }
+
+            .button {
+                background-color:lightblue;
+                transition-duration: 0.4s;
+            }
+
+            .button:hover {
+                background-color: #4CAF50; /* Green */
+            }
+
+            @keyframes slidein {
+                from {
+                    margin-left: 100%;
+                    width: 300%; 
+                 }
+
+                to {
+                    margin-left: 0%;
+                    width: 100%;
+                }
+            }
+        </style>
+        <script>
+            /* calc 5------------------------------------*/
+
+            // Globals for DOM
+            var control =  document.getElementById("control");
+            var output3=document.getElementById("Output3");
+            function handleType()
+            {
+                document.getElementById("control").setAttribute("value","Restart");
+                document.getElementById("control").setAttribute("onclick","window.location.reload()");
+                var G_one = ["Residential", "Warehousing","Industrial","Office"];
+                var typeChoice=document.getElementById("Type");
+                var Type=typeChoice.value;
+                console.log(G_one.includes(Type),Type)
+                var output1=document.getElementById("Output1");
+                var output2=document.getElementById("Output2");
+                if (G_one.includes(Type)){
+                    output1.innerHTML=`<h4> Please follow these steps.. </h4> 
+                                        <ol>
+                                            <li>Search for your Project's parcel by APN or Address using the search bar in the top right of the map below</li>
+                                            <li>Use the filters on the left based on your choice of Land type to filter the Screening layers</li>
+                                            <li>if your project is within a GREEN AREA after turning the correct filter on,  YOU ARE SCREENED</li>
+                                            <li>if it is not, continue
+                                        </ol>
+                                    `;
+                                    if (Type == "Residential") {
+                                        output2.innerHTML=`
+                                        <h4>Enter the Number of Dwelling Units </h4>
+                                        <label for='pResSizeS'> Single Family: </label>
+                                        <input id='pResSizeS' value type='text'><br>
+                                        <label for='pResSizeM'> Multi Family: </label>
+                                        <input id='pResSizeM' value type='text'><br>
+                                        <input class="button" type="Button" onclick="evalRes()" value="Result">
+                                        `;
+                                    }
+                                    else if (Type == "Office" || Type == "Industrial" || Type == "Warehousing") {
+                                        output2.innerHTML=`
+                                        <label for='pKSFSizeS'> Input # of Employees traveling </label>
+                                        <input id='pKSFSizeS' value type='text'><br>
+                                        <input class="button" type="Button" onclick="evalEmp()" value="Result">
+                                        `;
+                                    }
+                } else {
+                    output1.innerHTML=`<Br>
+                                        <label for='pKSFSizeS'> Input your project Size in Square feet: </label>
+                                        <input id='pKSFSizeS' value type='text'><br>
+                                        <input class="button" type="Button" onclick="evalSqf()" value="Result">
+                                        `;
+                }
+            };
+
+            function evalRes(){
+                var Threshold = (110/9.44) + (110/7.32)
+                console.log(Threshold)
+                var output3=document.getElementById("Output3");
+                var pResSizeS=document.getElementById("pResSizeS");
+                var pResSizeM=document.getElementById("pResSizeM");
+                if ((parseFloat(pResSizeS.value) + parseFloat(pResSizeM.value)) < Threshold){
+                    output3.innerHTML="You are screened from completeing a VMT Analysis";
+                    output3.style.color="green";
+                } else {
+                    output3.innerHTML="You need to Consult the County about completeing a VMT Analysis for your project"
+                    output3.style.color="red";
+                }
+            };
+            
+            function evalEmp(Type){
+                var output3=document.getElementById("Output3");
+                if (Type.value == "Industrial") {
+
+                }
+                else if (Type.value == "Warehousing") {
+
+                }
+                else {
+
+                }
+                output3.innerHTML=Type.value
+            }
+  
+            function evalSqf(){
+                var output3=document.getElementById("Output3");
+                if (Type.value == "Industrial") {
+
+                }
+                output3.innerHTML=Type.value
+            }
+         
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="calc5">
+                <h3>Choose your project type</h3>
+                <select id="Type">
+                    <option value='Residential'> Residential </option>
+                    <option value='Retail'> Retail </option>
+                    <option value='Office'> Office </option>
+                    <option value='Industrial'> Industrial </option>
+                    <option value='Warehousing'> Warehousing </option>
+                    <option value='Winery'> Winery </option>
+                </select><br>
+                <br>
+                <input id='control' value="Begin" type="button" class = "button" onclick="handleType()">
+                <br>
+                <div id="Output1"></div>
+                <div id="Output2"></div>
+                <div id="Output3"></div>
+            </div>
+        </div>
+    </body>
+</html>
