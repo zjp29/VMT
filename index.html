@@ -54,7 +54,7 @@
             {
                 document.getElementById("control").setAttribute("value","Restart");
                 document.getElementById("control").setAttribute("onclick","window.location.reload()");
-                var G_one = ["Residential", "Warehousing","Industrial","Office"];
+                var G_one = ["Residential - Single Family","Residential - MultiFamily", "Warehousing","Industrial","Office"];
                 var typeChoice=document.getElementById("Type");
                 var Type=typeChoice.value;
                 console.log(G_one.includes(Type),Type)
@@ -69,15 +69,19 @@
                                             <li>if it is not, continue
                                         </ol>
                                     `;
-                                    if (Type == "Residential") {
+                                    if (Type == "Residential - Single Family") {
                                         output2.innerHTML=`
                                         <h4>Enter the Number of Dwelling Units </h4>
                                         <label for='pResSizeS'> Single Family: </label>
                                         <input id='pResSizeS' value type='text'><br>
+                                        <input class="button" type="Button" onclick="evalResS()" value="Result">
+                                        `;
+                                    }
+                                    else if (Type == "Residential - MultiFamily"){
+                                        output2.innerHTML=`
                                         <label for='pResSizeM'> Multi Family: </label>
                                         <input id='pResSizeM' value type='text'><br>
-                                        <input class="button" type="Button" onclick="evalRes()" value="Result">
-                                        `;
+                                        <input class="button" type="Button" onclick="evalResM()" value="Result">`
                                     }
                                     else if (Type == "Office" || Type == "Industrial" || Type == "Warehousing") {
                                         output2.innerHTML=`
@@ -88,48 +92,77 @@
                                     }
                 } else {
                     output1.innerHTML=`<Br>
-                                        <label for='pKSFSizeS'> Input your project Size in Square feet: </label>
+                                        <label for='pKSFSizeS'> Input your project Size in KSF: </label>
                                         <input id='pKSFSizeS' value type='text'><br>
                                         <input class="button" type="Button" onclick="evalSqf()" value="Result">
                                         `;
                 }
             };
 
-            function evalRes(){
-                var Threshold = (110/9.44) + (110/7.32)
-                console.log(Threshold)
+            function evalResS(){
                 var output3=document.getElementById("Output3");
+                var Threshold = (110/9.44) 
                 var pResSizeS=document.getElementById("pResSizeS");
-                var pResSizeM=document.getElementById("pResSizeM");
-                if ((parseFloat(pResSizeS.value) + parseFloat(pResSizeM.value)) < Threshold){
+                var S_Size= parseFloat(pResSizeS.value)
+                if (S_Size < Threshold){
                     output3.innerHTML="You are screened from completeing a VMT Analysis";
                     output3.style.color="green";
-                } else {
+                }else{
                     output3.innerHTML="You need to Consult the County about completeing a VMT Analysis for your project"
                     output3.style.color="red";
                 }
             };
-            
-            function evalEmp(Type){
+            function evalResM(){
                 var output3=document.getElementById("Output3");
-                if (Type.value == "Industrial") {
-
+                var Threshold = (110/7.32)
+                var pResSizeM=document.getElementById("pResSizeM");
+                var M_Size= parseFloat(pResSizeM.value)
+                if (M_Size < Threshold) {
+                    output3.innerHTML="You are screened from completeing a VMT Analysis";
+                    output3.style.color="green";
+                }else{
+                    output3.innerHTML="You need to Consult the County about completeing a VMT Analysis for your project";
+                    output3.style.color="red";
                 }
-                else if (Type.value == "Warehousing") {
-
+            };
+            
+            function evalEmp(){
+                var output3=document.getElementById("Output3");
+                var pKSFSizeS=document.getElementById("pKSFSizeS");
+                var KSF_Size = parseFloat(pKSFSizeS.value);
+                if (Type.value == "Industrial") { // Check to see which Threshold to use
+                    var Threshold = (110/3.05);
+                }else if (Type.value == "Warehousing") {
+                    var Threshold = (110/5.05);
+                }else {
+                    var Threshold = (110/3.28);
                 }
-                else {
-
+                if (KSF_Size < Threshold){ // evaluate threshold
+                    output3.innerHTML="You are screened from completeing a VMT Analysis";
+                    output3.style.color="green";
+                }else{
+                    output3.innerHTML="You need to Consult the County about completeing a VMT Analysis for your project";
+                    output3.style.color="red";
                 }
-                output3.innerHTML=Type.value
             }
   
             function evalSqf(){
                 var output3=document.getElementById("Output3");
-                if (Type.value == "Industrial") {
 
+                if (Type.value == "Winery") {
+                    var Threshold = (110/45.96);
+                } else {
+                    var Threshold = (110/68.67);
                 }
-                output3.innerHTML=Type.value
+                var pKSFSizeS=document.getElementById("pKSFSizeS");
+                var KSF_Size = parseFloat(pKSFSizeS.value);
+                if (KSF_Size < Threshold){ // evaluate threshold
+                    output3.innerHTML="You are screened from completeing a VMT Analysis";
+                    output3.style.color="green";
+                }else{
+                    output3.innerHTML="You need to Consult the County about completeing a VMT Analysis for your project";
+                    output3.style.color="red";
+                }
             }
          
         </script>
@@ -139,7 +172,8 @@
             <div class="calc5">
                 <h3>Choose your project type</h3>
                 <select id="Type">
-                    <option value='Residential'> Residential </option>
+                    <option value='Residential - Single Family'> Residential - Single Family </option>
+                    <option value='Residential - MultiFamily'> Residential - MultiFamily </option>
                     <option value='Retail'> Retail </option>
                     <option value='Office'> Office </option>
                     <option value='Industrial'> Industrial </option>
