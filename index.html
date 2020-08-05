@@ -12,9 +12,33 @@
                 grid-gap:1em;
             }
             div {
-                text-align: center;
+                text-align: left;
                 animation-duration: 1s;
                 animation-name: slidein;
+            }
+            .myButton {
+	            box-shadow:inset 0px 1px 0px 0px #caefab;
+	            background:linear-gradient(to bottom, #77d42a 5%, #5cb811 100%);
+	            background-color:#77d42a;
+	            border-radius:6px;
+	            border:1px solid #268a16;
+	            display:inline-block;
+	            cursor:pointer;
+	            color:#306108;
+	            font-family:Arial;
+	            font-size:15px;
+	            font-weight:bold;
+	            padding:6px 24px;
+	            text-decoration:none;
+	            text-shadow:0px 1px 0px #aade7c;
+            }
+            .myButton:hover {
+	            background:linear-gradient(to bottom, #5cb811 5%, #77d42a 100%);
+	            background-color:#5cb811;
+            }
+            .myButton:active {
+	            position:relative;
+	            top:1px;
             }
             .calc5 {
                 grid-area:calc5;
@@ -42,30 +66,36 @@
                     margin-left: 0%;
                     width: 100%;
                 }
+
+                
             }
         </style>
         <script>
             /* calc 5------------------------------------*/
 
             // Globals for DOM
+
             var control =  document.getElementById("control");
             var output3=document.getElementById("Output3");
             function handleType()
             {
-                document.getElementById("control").setAttribute("value","Restart");
-                document.getElementById("control").setAttribute("onclick","window.location.reload()");
+                document.getElementById("myControlButton").innerHTML = "Restart";
+                document.getElementById("myControlButton").setAttribute("onclick","window.location.reload()");
                 var G_one = ["Residential - Single Family","Residential - MultiFamily", "Warehousing","Industrial","Office"];
                 var typeChoice=document.getElementById("Type");
                 var Type=typeChoice.value;
                 console.log(G_one.includes(Type),Type)
                 var output1=document.getElementById("Output1");
                 var output2=document.getElementById("Output2");
+                output1.innerHTML=" "
+                output2.innerHTML=" "
                 if (G_one.includes(Type)){
                     output1.innerHTML=`<h4> Please follow these steps.. </h4> 
                                         <ol>
                                             <li>Search for your Project's parcel by APN or Address using the search bar in the top right of the map below</li>
                                             <li>Use the filters on the left based on your choice of Land type to filter the Screening layers</li>
-                                            <li>if your project is within a GREEN AREA after turning the correct filter on,  YOU ARE SCREENED</li>
+                                            <li>if your project is within a GREEN AREA after turning the correct filter on, <span style="color:green;"><b>you are screened<br> 
+                                            from completing a full CEQA VMT Analysis</b></span></li>
                                             <li>if it is not, continue
                                         </ol>
                                     `;
@@ -164,14 +194,14 @@
                     output3.style.color="red";
                 }
             }
-         
+         // print page with html then send img and json to python 
         </script>
     </head>
     <body>
         <div class="container">
             <div class="calc5">
                 <h3>Choose your project type</h3>
-                <select id="Type">
+                <select id="Type" onchange="handleType()">
                     <option value='Residential - Single Family'> Residential - Single Family </option>
                     <option value='Residential - MultiFamily'> Residential - MultiFamily </option>
                     <option value='Retail'> Retail </option>
@@ -181,9 +211,9 @@
                     <option value='Winery'> Winery </option>
                 </select><br>
                 <br>
-                <input id='control' value="Begin" type="button" class = "button" onclick="handleType()">
+                <a href="#" class="myButton" id="myControlButton" onclick="handleType()">Begin</a>
                 <br>
-                <div id="Output1"></div>
+                <div id="Output1"></div> 
                 <div id="Output2"></div>
                 <div id="Output3"></div>
             </div>
