@@ -104,27 +104,27 @@
                                         <h4>Enter the Number of Dwelling Units </h4>
                                         <label for='pResSizeS'> Single Family: </label>
                                         <input id='pResSizeS' value type='text'><br>
-                                        <input class="button" type="Button" onclick="evalResS()" value="Result">
+                                        <input class="myButton" type="Button" onclick="evalResS()" value="Result">
                                         `;
                                     }
                                     else if (Type == "Residential - MultiFamily"){
                                         output2.innerHTML=`
                                         <label for='pResSizeM'> Multi Family: </label>
                                         <input id='pResSizeM' value type='text'><br>
-                                        <input class="button" type="Button" onclick="evalResM()" value="Result">`
+                                        <input class="myButton" type="Button" onclick="evalResM()" value="Result">`
                                     }
                                     else if (Type == "Office" || Type == "Industrial" || Type == "Warehousing") {
                                         output2.innerHTML=`
                                         <label for='pKSFSizeS'> Input # of Employees traveling </label>
                                         <input id='pKSFSizeS' value type='text'><br>
-                                        <input class="button" type="Button" onclick="evalEmp()" value="Result">
+                                        <input class="myButton" type="Button" onclick="evalEmp()" value="Result">
                                         `;
                                     }
                 } else {
                     output1.innerHTML=`<Br>
                                         <label for='pKSFSizeS'> Input your project Size in KSF: </label>
                                         <input id='pKSFSizeS' value type='text'><br>
-                                        <input class="button" type="Button" onclick="evalSqf()" value="Result">
+                                        <input class="myButton" type="Button" onclick="evalSqf()" value="Result">
                                         `;
                 }
             };
