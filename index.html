@@ -15,6 +15,7 @@
                 text-align: left;
                 animation-duration: 1s;
                 animation-name: slidein;
+                padding: 1em;
             }
             .myButton {
 	            box-shadow:inset 0px 1px 0px 0px #caefab;
@@ -70,14 +71,15 @@
                 
             }
         </style>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js" integrity="sha384-NaWTHo/8YCBYJ59830LTz/P4aQZK1sS0SneOgAvhsIl3zBu8r9RevNg5lHCHAuQ/" crossorigin="anonymous"></script>
+        
         <script>
-            /* calc 5------------------------------------*/
 
             // Globals for DOM
+            var printObj = {"LandUse":null,"value": null, "threshold":null, "screen":null};
+            var control =  document.getElementById("control"); // begin and restart button
 
-            var control =  document.getElementById("control");
-            var output3=document.getElementById("Output3");
-            function handleType()
+            function handleType() // changes the HTML based on what land use type is selected 
             {
                 document.getElementById("myControlButton").innerHTML = "Restart";
                 document.getElementById("myControlButton").setAttribute("onclick","window.location.reload()");
@@ -89,6 +91,8 @@
                 var output2=document.getElementById("Output2");
                 output1.innerHTML=" "
                 output2.innerHTML=" "
+                //output3.innerHTML=" "
+                //report.innerHTML=" "
                 if (G_one.includes(Type)){
                     output1.innerHTML=`<h4> Please follow these steps.. </h4> 
                                         <ol>
@@ -120,29 +124,40 @@
                                         <input class="myButton" type="Button" onclick="evalEmp()" value="Result">
                                         `;
                                     }
+                                    
                 } else {
                     output1.innerHTML=`<Br>
                                         <label for='pKSFSizeS'> Input your project Size in KSF: </label>
-                                        <input id='pKSFSizeS' value type='text'><br>
+                                        <input id='pKSFSizeS' value type='text'>
                                         <input class="myButton" type="Button" onclick="evalSqf()" value="Result">
                                         `;
                 }
+                printObj.LandUse = Type;
             };
 
-            function evalResS(){
+            function evalResS(){ // uses the Threshold to display whether screened or not screened for Single Family Res
+                var report= document.getElementById("reportOut");
                 var output3=document.getElementById("Output3");
                 var Threshold = (110/9.44) 
                 var pResSizeS=document.getElementById("pResSizeS");
                 var S_Size= parseFloat(pResSizeS.value)
                 if (S_Size < Threshold){
-                    output3.innerHTML="You are screened from completeing a VMT Analysis";
+                    output3.innerHTML="You are screened from completeing a VMT Analysis<br>";
                     output3.style.color="green";
+                    printObj.screen = "Screened"
                 }else{
                     output3.innerHTML="You need to Consult the County about completeing a VMT Analysis for your project"
                     output3.style.color="red";
+                    printObj.screen = "Not Screened"
                 }
+                report.innerHTML=`
+                                    use the print function in the web app to download an image of your area<br><br><input id = "image" type="file" value="Add Map"> <br><br>
+                                    <input class="myButton" type="Button" onclick="printReport()" value="Report PDF">
+                                    `;
+                printObj.value = S_Size
+                printObj.Threshold = Threshold
             };
-            function evalResM(){
+            function evalResM(){ // uses the Threshold to display whether screened or not screened for Multi Family Res
                 var output3=document.getElementById("Output3");
                 var Threshold = (110/7.32)
                 var pResSizeM=document.getElementById("pResSizeM");
@@ -154,9 +169,11 @@
                     output3.innerHTML="You need to Consult the County about completeing a VMT Analysis for your project";
                     output3.style.color="red";
                 }
+                printObj.value = M_Size
+                printObj.Threshold = Threshold
             };
             
-            function evalEmp(){
+            function evalEmp(){ // uses the Threshold to display whether screened or not screened based on SQFootage
                 var output3=document.getElementById("Output3");
                 var pKSFSizeS=document.getElementById("pKSFSizeS");
                 var KSF_Size = parseFloat(pKSFSizeS.value);
@@ -195,6 +212,17 @@
                 }
             }
          // print page with html then send img and json to python 
+
+         function printReport(){
+            var pdf = new jsPDF('p','mm','a4');
+            var image = document.getElementById("image");
+            //const reader = new FileReader;
+
+            //pdf.addImage(image.src,'PNG',50,50,180,180);
+            var text = printObj.LandUse +"\n\n"+ "Value : " +printObj.value +"\n\n"+ "Threshold: "+printObj.threshold +"\n\n"+ printObj.screen;
+            pdf.text(30, 30, text);
+            pdf.save('Report.pdf');
+         }
         </script>
     </head>
     <body>
@@ -216,6 +244,7 @@
                 <div id="Output1"></div> 
                 <div id="Output2"></div>
                 <div id="Output3"></div>
+                <div id="reportOut"></div>
             </div>
         </div>
     </body>
