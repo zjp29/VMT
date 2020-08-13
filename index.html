@@ -6,10 +6,10 @@
             }
 
             .container {
-                display:grid;
+                /*display:grid;
                 grid-template-areas:
                     'calc5';
-                grid-gap:1em;
+                grid-gap:1em;*/
             }
             div {
                 text-align: left;
@@ -75,35 +75,33 @@
         
         <script>
 
-            // Globals for DOM
             var printObj = {"LandUse":null,"value": null, "threshold":null, "screen":null};
-            var control =  document.getElementById("control"); // begin and restart button
 
             function handleType() // changes the HTML based on what land use type is selected 
             {
-                document.getElementById("myControlButton").innerHTML = "Restart";
-                document.getElementById("myControlButton").setAttribute("onclick","window.location.reload()");
                 var G_one = ["Residential - Single Family","Residential - MultiFamily", "Warehousing","Industrial","Office"];
                 var typeChoice=document.getElementById("Type");
                 var Type=typeChoice.value;
                 console.log(G_one.includes(Type),Type)
                 var output1=document.getElementById("Output1");
                 var output2=document.getElementById("Output2");
+                var output3=document.getElementById("Output3");
                 output1.innerHTML=" "
                 output2.innerHTML=" "
-                //output3.innerHTML=" "
-                //report.innerHTML=" "
+                output3.innerHTML=" "
                 if (G_one.includes(Type)){
-                    output1.innerHTML=`<h4> Please follow these steps.. </h4> 
-                                        <ol>
-                                            <li>Search for your Project's parcel by APN or Address using the search bar in the top right of the map below</li>
-                                            <li>Use the filters on the left based on your choice of Land type to filter the Screening layers</li>
-                                            <li>if your project is within a GREEN AREA after turning the correct filter on, <span style="color:green;"><b>you are screened<br> 
-                                            from completing a full CEQA VMT Analysis</b></span></li>
-                                            <li>if it is not, continue
-                                        </ol>
-                                    `;
+                    /*output1.innerHTML=`<h4> This land use type is eligible for Map Based Screening! </h4> 
+                                        <ul>
+                                            <li>Search for your Project's location by APN or Address using the search bar in the top right of the map</li>
+                                        </ul>
+                                    `;*/
                                     if (Type == "Residential - Single Family") {
+                                        output1.innerHTML=`<h4> This land use type is eligible for Map Based Screening! </h4>
+                                        <ul>
+                                            <li>Search for your Project's location by APN or Address using the search bar in the top right of the map</li>
+                                            <li>If your Project lies within a <strong>green</strong> or <strong>orange</strong> area, <span style="color:green"> your project does not have significant vmt and You are screened from completing a full VMT analysis </span></li>
+                                            <li>if it does not, It is still possible to be screened based on your project size</li>
+                                        </ul>`;                     
                                         output2.innerHTML=`
                                         <h4>Enter the Number of Dwelling Units </h4>
                                         <label for='pResSizeS'> Single Family: </label>
@@ -112,12 +110,25 @@
                                         `;
                                     }
                                     else if (Type == "Residential - MultiFamily"){
+                                        output1.innerHTML=`<h4> This land use type is eligible for Map Based Screening! </h4>
+                                        <ul>
+                                            <li>Search for your Project's location by APN or Address using the search bar in the top right of the map</li>
+                                            <li>If your Project lies within a <strong>green</strong> or <strong>orange</strong> area, <span style="color:green"> your project does not have significant vmt and You are screened from completing a full VMT analysis </span></li>
+                                            <li>if it does not, It is still possible to be screened based on your project size</li>
+                                        </ul>`;  
                                         output2.innerHTML=`
+                                        <h4>Enter the Number of Dwelling Units </h4>
                                         <label for='pResSizeM'> Multi Family: </label>
                                         <input id='pResSizeM' value type='text'><br>
                                         <input class="myButton" type="Button" onclick="evalResM()" value="Result">`
                                     }
                                     else if (Type == "Office" || Type == "Industrial" || Type == "Warehousing") {
+                                        output1.innerHTML=`<h4> This land use type is eligible for Map Based Screening! </h4>
+                                        <ul>
+                                            <li>Search for your Project's location by APN or Address using the search bar in the top right of the map</li>
+                                            <li>If your Project lies within a blue or orange area, <span style="color:green">  your project does not have significant vmt and You are screened from completing a full VMT analysis </span></li>
+                                            <li>if it does not, It is still possible to be screened based on your project size</li>
+                                        </ul>`;  
                                         output2.innerHTML=`
                                         <label for='pKSFSizeS'> Input # of Employees traveling </label>
                                         <input id='pKSFSizeS' value type='text'><br>
@@ -126,8 +137,8 @@
                                     }
                                     
                 } else {
-                    output1.innerHTML=`<Br>
-                                        <label for='pKSFSizeS'> Input your project Size in KSF: </label>
+                    output1.innerHTML=`<Br><h4> This land use type is not eligible for map based screening, but may still be screened based on size. </h4><br>
+                                        <label for='pKSFSizeS'> Input your project Size in Thousands of Square Feet: </label>
                                         <input id='pKSFSizeS' value type='text'>
                                         <input class="myButton" type="Button" onclick="evalSqf()" value="Result">
                                         `;
@@ -142,18 +153,17 @@
                 var pResSizeS=document.getElementById("pResSizeS");
                 var S_Size= parseFloat(pResSizeS.value)
                 if (S_Size < Threshold){
-                    output3.innerHTML="You are screened from completeing a VMT Analysis<br>";
+                    output3.innerHTML=`Based on the number of houses that will be developed you are screened from completeing a VMT Analysis.  
+                    Your project will produce less then 110 Daily Trips.<br><Br>
+                    <a>Technical Document Link</a><br>`;
                     output3.style.color="green";
                     printObj.screen = "Screened"
                 }else{
-                    output3.innerHTML="You need to Consult the County about completeing a VMT Analysis for your project"
-                    output3.style.color="red";
+                    output3.innerHTML=`<span style="color:red">Your project is too large to be screened and You need to consult the County about completeing a VMT Analysis</span><Br><br>
+                    <a href="https://www.sjcog.org/373/Senate-Bill-743">County VMT Guidelines</a>`
+                    
                     printObj.screen = "Not Screened"
                 }
-                report.innerHTML=`
-                                    use the print function in the web app to download an image of your area<br><br><input id = "image" type="file" value="Add Map"> <br><br>
-                                    <input class="myButton" type="Button" onclick="printReport()" value="Report PDF">
-                                    `;
                 printObj.value = S_Size
                 printObj.Threshold = Threshold
             };
@@ -163,11 +173,13 @@
                 var pResSizeM=document.getElementById("pResSizeM");
                 var M_Size= parseFloat(pResSizeM.value)
                 if (M_Size < Threshold) {
-                    output3.innerHTML="You are screened from completeing a VMT Analysis";
+                    output3.innerHTML=`Based on the number of houses that will be developed you are screened from completeing a VMT Analysis.  
+                    Your project will produce less then 110 Daily Trips.<br><Br>
+                    <a>Technical Document Link</a><br>`;
                     output3.style.color="green";
                 }else{
-                    output3.innerHTML="You need to Consult the County about completeing a VMT Analysis for your project";
-                    output3.style.color="red";
+                    output3.innerHTML=`<span style="color:red">Your project is too large to be screened and You need to consult the County about completeing a VMT Analysis</span><Br><br>
+                    <a href="https://www.sjcog.org/373/Senate-Bill-743">County VMT Guidelines</a>`;
                 }
                 printObj.value = M_Size
                 printObj.Threshold = Threshold
@@ -185,15 +197,18 @@
                     var Threshold = (110/3.28);
                 }
                 if (KSF_Size < Threshold){ // evaluate threshold
-                    output3.innerHTML="You are screened from completeing a VMT Analysis";
+                    output3.innerHTML=`Based on the number of employees that will be commmuting you are screened from completeing a VMT Analysis.  
+                    Your project will produce less then 110 Daily Trips.<br><Br>
+                    <a>Technical Document Link</a><br>`;
                     output3.style.color="green";
                 }else{
-                    output3.innerHTML="You need to Consult the County about completeing a VMT Analysis for your project";
-                    output3.style.color="red";
+                    output3.innerHTML=`<span style="color:red">Your project is too large to be screened and You need to consult the County about completeing a VMT Analysis</span><Br><br>
+                    <a href="https://www.sjcog.org/373/Senate-Bill-743">County VMT Guidelines</a>`;
+                    
                 }
             }
   
-            function evalSqf(){
+            function evalSqf(){   
                 var output3=document.getElementById("Output3");
 
                 if (Type.value == "Winery") {
@@ -207,22 +222,21 @@
                     output3.innerHTML="You are screened from completeing a VMT Analysis";
                     output3.style.color="green";
                 }else{
-                    output3.innerHTML="You need to Consult the County about completeing a VMT Analysis for your project";
-                    output3.style.color="red";
+                    output3.innerHTML=`<span style="color:red">You need to Consult the County about completeing a VMT Analysis for your project</span><br><br>
+                    Retail projects that are less then 50,000 squarefeet may be screened if they are deemed locally serving. 
+                    Consult the County to determine if the market geography of your retail project is locally serving.<br> <strong>[Link to county contact]</strong>`
+                    
                 }
             }
-         // print page with html then send img and json to python 
 
-         function printReport(){
-            var pdf = new jsPDF('p','mm','a4');
-            var image = document.getElementById("image");
-            //const reader = new FileReader;
+            function reset(){
+                document.getElementById("Output1").innerHTML=' '
+                document.getElementById("Output2").innerHTML=' '
+                document.getElementById("Output3").innerHTML=' '
+                document.getElementById("myControlButton").innerHTML = "Begin";
+                document.getElementById("myControlButton").setAttribute("onclick","handleType()");
+            }
 
-            //pdf.addImage(image.src,'PNG',50,50,180,180);
-            var text = printObj.LandUse +"\n\n"+ "Value : " +printObj.value +"\n\n"+ "Threshold: "+printObj.threshold +"\n\n"+ printObj.screen;
-            pdf.text(30, 30, text);
-            pdf.save('Report.pdf');
-         }
         </script>
     </head>
     <body>
@@ -230,6 +244,7 @@
             <div class="calc5">
                 <h3>Choose your project type</h3>
                 <select id="Type" onchange="handleType()">
+                    <option value="" selected disabled hidden>Choose here</option>
                     <option value='Residential - Single Family'> Residential - Single Family </option>
                     <option value='Residential - MultiFamily'> Residential - MultiFamily </option>
                     <option value='Retail'> Retail </option>
@@ -238,8 +253,6 @@
                     <option value='Warehousing'> Warehousing </option>
                     <option value='Winery'> Winery </option>
                 </select><br>
-                <br>
-                <a href="#" class="myButton" id="myControlButton" onclick="handleType()">Begin</a>
                 <br>
                 <div id="Output1"></div> 
                 <div id="Output2"></div>
