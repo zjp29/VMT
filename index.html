@@ -145,22 +145,23 @@
                 }
                 printObj.LandUse = Type;
             };
-
+            
             function evalResS(){ // uses the Threshold to display whether screened or not screened for Single Family Res
                 var report= document.getElementById("reportOut");
                 var output3=document.getElementById("Output3");
                 var Threshold = (110/9.44) 
+                var equation = "110 Daily Trips / 9.44 (Daily Rate Per Unit) = ";
                 var pResSizeS=document.getElementById("pResSizeS");
                 var S_Size= parseFloat(pResSizeS.value)
                 if (S_Size < Threshold){
                     output3.innerHTML=`Based on the number of houses that will be developed you are screened from completeing a VMT Analysis.  
                     Your project will produce less then 110 Daily Trips.<br><Br>
-                    <a>Technical Document Link</a><br>`;
+                    <a>Technical Document Link</a><br>`+`<br> <br> equation used: ` + equation + Threshold.toFixed(2)+ "<- Threshold";;
                     output3.style.color="green";
                     printObj.screen = "Screened"
                 }else{
                     output3.innerHTML=`<span style="color:red">Your project is too large to be screened and You need to consult the County about completeing a VMT Analysis</span><Br><br>
-                    <a href="https://www.sjcog.org/373/Senate-Bill-743">County VMT Guidelines</a>`
+                    <a href="https://www.sjcog.org/373/Senate-Bill-743">County VMT Guidelines</a>`+`<br> <br> equation used: ` + equation + Threshold.toFixed(2)+ "<- Threshold";
                     
                     printObj.screen = "Not Screened"
                 }
@@ -170,16 +171,17 @@
             function evalResM(){ // uses the Threshold to display whether screened or not screened for Multi Family Res
                 var output3=document.getElementById("Output3");
                 var Threshold = (110/7.32)
+                var equation = "110 Daily Trips / 7.32 (Daily Rate Per Unit) = ";
                 var pResSizeM=document.getElementById("pResSizeM");
                 var M_Size= parseFloat(pResSizeM.value)
                 if (M_Size < Threshold) {
                     output3.innerHTML=`Based on the number of houses that will be developed you are screened from completeing a VMT Analysis.  
                     Your project will produce less then 110 Daily Trips.<br><Br>
-                    <a>Technical Document Link</a><br>`;
+                    <a>Technical Document Link</a><br>`+`<br> <br> equation used: ` + equation + Threshold.toFixed(2)+ "<- Threshold";;
                     output3.style.color="green";
                 }else{
                     output3.innerHTML=`<span style="color:red">Your project is too large to be screened and You need to consult the County about completeing a VMT Analysis</span><Br><br>
-                    <a href="https://www.sjcog.org/373/Senate-Bill-743">County VMT Guidelines</a>`;
+                    <a href="https://www.sjcog.org/373/Senate-Bill-743">County VMT Guidelines</a>`+`<br> <br> equation used: ` + equation + Threshold.toFixed(2)+ "<- Threshold";;
                 }
                 printObj.value = M_Size
                 printObj.Threshold = Threshold
@@ -191,19 +193,22 @@
                 var KSF_Size = parseFloat(pKSFSizeS.value);
                 if (Type.value == "Industrial") { // Check to see which Threshold to use
                     var Threshold = (110/3.05);
+                    var equation = "110 Daily Trips / 5.05 (Daily Rate Per Unit) = ";
                 }else if (Type.value == "Warehousing") {
                     var Threshold = (110/5.05);
+                    var equation = "110 Daily Trips / 5.05 (Daily Rate Per Unit) = ";
                 }else {
                     var Threshold = (110/3.28);
+                    var equation = "110 Daily Trips / 3.28 (Daily Rate Per Unit) = ";
                 }
                 if (KSF_Size < Threshold){ // evaluate threshold
                     output3.innerHTML=`Based on the number of employees that will be commmuting you are screened from completeing a VMT Analysis.  
                     Your project will produce less then 110 Daily Trips.<br><Br>
-                    <a>Technical Document Link</a><br>`;
+                    <a>Technical Document Link</a><br>`+`<br> <br> equation used: ` + equation + Threshold.toFixed(2)+ "<- Threshold";;
                     output3.style.color="green";
                 }else{
                     output3.innerHTML=`<span style="color:red">Your project is too large to be screened and You need to consult the County about completeing a VMT Analysis</span><Br><br>
-                    <a href="https://www.sjcog.org/373/Senate-Bill-743">County VMT Guidelines</a>`;
+                    <a href="https://www.sjcog.org/373/Senate-Bill-743">County VMT Guidelines</a>`+`<br> <br> equation used: ` + equation + Threshold.toFixed(2)+ "<- Threshold";
                     
                 }
             }
@@ -213,19 +218,21 @@
 
                 if (Type.value == "Winery") {
                     var Threshold = (110/45.96);
+                    var equation = "110 Daily Trips / 45.96 (Daily Rate Per Unit) = ";
                 } else {
                     var Threshold = (110/68.67);
+                    var equation = "110 Daily Trips / 68.67 (Daily Rate Per Unit) = ";
                 }
                 var pKSFSizeS=document.getElementById("pKSFSizeS");
                 var KSF_Size = parseFloat(pKSFSizeS.value);
                 if (KSF_Size < Threshold){ // evaluate threshold
-                    output3.innerHTML="You are screened from completeing a VMT Analysis";
+                    output3.innerHTML="You are screened from completeing a VMT Analysis"+`<br> <br> equation used: ` + equation + Threshold.toFixed(2)+ "<- Threshold";;
                     output3.style.color="green";
                 }else{
                     output3.innerHTML=`<span style="color:red">You need to Consult the County about completeing a VMT Analysis for your project</span><br><br>
                     Retail projects that are less then 50,000 squarefeet may be screened if they are deemed locally serving. 
-                    Consult the County to determine if the market geography of your retail project is locally serving.<br> <strong>[Link to county contact]</strong>`
-                    
+                    Consult the County to determine if the market geography of your retail project is locally serving.<br><br> <strong>[Link to county contact]</strong>`+`<br> <br> equation used: ` + equation + Threshold.toFixed(2)+ "<- Threshold";
+
                 }
             }
 
